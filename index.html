@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>استوديو صانعي المحتوى الذكي - AI Video Studio</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts Cairo -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <!-- React & ReactDOM CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: #f8fafc; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    
+    function App() {
+      const [step, setStep] = useState(1);
+      const [fileName, setFileName] = useState('');
+      const [fileSize, setFileSize] = useState('');
+      const [videoUrl, setVideoUrl] = useState('');
+      const [progress, setProgress] = useState(0);
+
+      useEffect(() => {
+        // تحديث الأيقونات عند تحميل المكونات
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }, [step]);
+
+      const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          setFileName(file.name);
+          setFileSize((file.size / (1024 * 1024)).toFixed(2) + ' MB');
+          setVideoUrl(URL.createObjectURL(file));
+          simulateAnalysis();
+        }
+      };
+
+      const simulateAnalysis = () => {
+        setStep(2);
+        let p = 0;
+        const interval = setInterval(() => {
+          p += 15;
+          setProgress(p);
+          if (p >= 100) {
+            clearInterval(interval);
+            setStep(3);
+          }
+        }, 250);
+      };
+
+      return (
+        <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+          {/* شريط العنوان */}
+          <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+                <i data-lucide="wand-2" className="w-6 h-6"></i>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                  استوديو صانعي المحتوى <span className="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">Local Engine</span>
+                </h1>
+                <p className="text-xs text-slate-400">معالجة محلية بالكامل في متصفحك بدون خوادم خارجية</p>
+              </div>
+            </div>
+            <span className="flex items-center gap-1.5 text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/25 text-xs">
+              <i data-lucide="shield-check" className="w-4 h-4"></i> آمن ومحلي
+            </span>
+          </header>
+
+          <main className="flex-1 max-w-7xl w-full mx-auto p-6 flex flex-col">
+            {/* المرحلة 1: رفع الفيديو */}
+            {step === 1 && (
+              <div className="flex-1 flex flex-col items-center justify-center my-12">
+                <div className="text-center max-w-xl mb-8">
+                  <h2 className="text-3xl font-black text-white mb-3">وفر ساعات من المونتاج بضغطة زر</h2>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    ارفع فيديو قناتك، سيقوم النظام محلياً باكتشاف وحذف سكتات الصمت وتجهيزه للتصدير فوراً.
+                  </p>
+                </div>
+
+                <label className="w-full max-w-2xl border-2 border-dashed border-slate-700 hover:border-indigo-500 bg-slate-900/40 hover:bg-slate-900/80 transition-all rounded-3xl p-12 flex flex-col items-center justify-center cursor-pointer group shadow-2xl">
+                  <div className="bg-indigo-600/10 group-hover:bg-indigo-600/20 p-6 rounded-2xl text-indigo-400 mb-4 transition">
+                    <i data-lucide="upload" className="w-10 h-10"></i>
+                  </div>
+                  <span className="text-lg font-bold text-white mb-1">اختر فيديو أو اسحبه هنا</span>
+                  <span className="text-xs text-slate-500">يدعم صيغ MP4, MOV, MKV</span>
+                  <input type="file" accept="video/*" onChange={handleFileUpload} className="hidden" />
+                </label>
+              </div>
+            )}
+
+            {/* المرحلة 2: التحليل */}
+            {step === 2 && (
+              <div className="flex-1 flex flex-col items-center justify-center my-12">
+                <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center shadow-2xl">
+                  <div className="w-16 h-16 border-4 border-indigo-600/20 border-t-indigo-500 rounded-full animate-spin mx-auto mb-6"></div>
+                  <h3 className="text-xl font-bold text-white mb-2">جاري تحليل الفيديو والصوت...</h3>
+                  <div className="w-full bg-slate-950 rounded-full h-3 mb-3 overflow-hidden border border-slate-800">
+                    <div className="bg-indigo-600 h-full transition-all duration-300 rounded-full" style={{ width: `${progress}%` }}></div>
+                  </div>
+                  <span className="text-xs font-mono text-indigo-400">{progress}% مكتمل</span>
+                </div>
+              </div>
+            )}
+
+            {/* المرحلة 3: لوحة التحكم والتعديل */}
+            {step === 3 && (
+              <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 my-4">
+                <div className="lg:col-span-2 flex flex-col gap-4">
+                  <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+                    <div className="bg-black aspect-video flex items-center justify-center">
+                      {videoUrl && <video src={videoUrl} controls className="w-full h-full object-contain" />}
+                    </div>
+                    <div className="p-4 bg-slate-900/90 border-t border-slate-800 flex justify-between text-xs">
+                      <div>
+                        <span className="font-bold text-white block">{fileName}</span>
+                        <span className="text-slate-400">{fileSize}</span>
+                      </div>
+                      <span className="text-emerald-400 font-medium">تم التحليل بنجاح ✓</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5">
+                    <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">المخطط الزمني للموجات الصوتية</h4>
+                    <div className="h-14 bg-slate-950 rounded-xl border border-slate-800 flex items-center px-4 gap-1">
+                      {[...Array(30)].map((_, i) => (
+                        <div key={i} className={`flex-1 rounded-full ${i % 3 === 0 ? 'bg-indigo-500 h-8' : 'bg-slate-800 h-4'}`}></div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between gap-6">
+                  <div className="flex flex-col gap-4">
+                    <h3 className="font-bold text-base text-white">خيارات المعالجة</h3>
+                    <label className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-2xl cursor-pointer">
+                      <span className="text-sm font-medium text-white">حذف سكتات الصمت</span>
+                      <input type="checkbox" defaultChecked className="accent-indigo-600 w-4 h-4" />
+                    </label>
+                    <label className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-2xl cursor-pointer">
+                      <span className="text-sm font-medium text-white">تصحيح الألوان التلقائي</span>
+                      <input type="checkbox" className="accent-indigo-600 w-4 h-4" />
+                    </label>
+                  </div>
+
+                  <div className="flex flex-col gap-3 pt-4 border-t border-slate-800">
+                    <button 
+                      onClick={() => alert("جاري تصدير الفيديو النهائي...")}
+                      className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-2xl shadow-lg transition text-sm flex items-center justify-center gap-2"
+                    >
+                      <i data-lucide="download" className="w-4 h-4"></i> تصدير الفيديو
+                    </button>
+                    <button 
+                      onClick={() => { setStep(1); setVideoUrl(''); }}
+                      className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 rounded-xl text-xs transition"
+                    >
+                      رفع فيديو آخر
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
