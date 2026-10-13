@@ -35,10 +35,9 @@
       const [videoUrl, setVideoUrl] = useState('');
       const [progress, setProgress] = useState(0);
       
-      // أدوات التحكم والمزايا الجديدة
       const [removeSilence, setRemoveSilence] = useState(true);
       const [audioBoost, setAudioBoost] = useState(true);
-      const [colorPreset, setColorPreset] = useState('normal'); // normal, cinema, bright, bw
+      const [colorPreset, setColorPreset] = useState('normal');
       const [watermarkText, setWatermarkText] = useState('');
       const [isExporting, setIsExporting] = useState(false);
       
@@ -73,13 +72,11 @@
         }, 200);
       };
 
-      // عملية تصدير وتحميل الفيديو حقيقياً من المتصفح
       const handleExport = () => {
         if (!videoUrl) return;
         setIsExporting(true);
         setTimeout(() => {
           setIsExporting(false);
-          // إنشاء رابط تنزيل وهمي حقيقي للملف الحالي
           const a = document.createElement('a');
           a.href = videoUrl;
           a.download = `pro_edited_${fileName || 'video.mp4'}`;
@@ -92,7 +89,6 @@
 
       return (
         <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-          {/* شريط العنوان */}
           <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-500/30">
@@ -111,17 +107,16 @@
           </header>
 
           <main className="flex-1 max-w-7xl w-full mx-auto p-6 flex flex-col">
-            {/* المرحلة 1: رفع الفيديو */}
             {step === 1 && (
               <div className="flex-1 flex flex-col items-center justify-center my-12">
-                <div className="text-center max-xl mb-8">
+                <div className="text-center max-w-xl mb-8">
                   <h2 className="text-3xl font-black text-white mb-3">وداعاً لساعات المونتاج الضائعة</h2>
                   <p className="text-slate-400 text-sm leading-relaxed">
                     ارفع الفيديو الخاص بك، وقم بتطبيق الفلاتر، إزالة السكتات، وتحسين الصوت بضغطة زر.
                   </p>
                 </div>
 
-                <label className="w-full max-w-2xl border-2 border-dashed border-slate-700 hover:border-indigo-500 bg-slate-900/40 hover:bg-slate-900/80 transition-all rounded-3xl p-12 flex flex-col items-center justify-center cursor-pointer group shadow-2xl">
+                <label className="w-full max-w-2xl border-2 border-dashed border-slate-700 hover:border-indigo-500 bg-slate-900/40 hover:bg-slate-900/85 transition-all rounded-3xl p-12 flex flex-col items-center justify-center cursor-pointer group shadow-2xl">
                   <div className="bg-indigo-600/10 group-hover:bg-indigo-600/20 p-6 rounded-2xl text-indigo-400 mb-4 transition">
                     <i data-lucide="upload" className="w-10 h-10"></i>
                   </div>
@@ -132,7 +127,6 @@
               </div>
             )}
 
-            {/* المرحلة 2: التحليل */}
             {step === 2 && (
               <div className="flex-1 flex flex-col items-center justify-center my-12">
                 <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center shadow-2xl">
@@ -146,11 +140,8 @@
               </div>
             )}
 
-            {/* المرحلة 3: لوحة التحكم والتحرير الشاملة */}
             {step === 3 && (
               <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 my-4">
-                
-                {/* قسم المعاينة والفيديو */}
                 <div className="lg:col-span-2 flex flex-col gap-4">
                   <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
                     <div className="bg-black aspect-video flex items-center justify-center relative overflow-hidden">
@@ -183,7 +174,6 @@
                     </div>
                   </div>
 
-                  {/* المخطط الزمني */}
                   <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5">
                     <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
                       <i data-lucide="scissors" className="w-4 h-4 text-indigo-400"></i> المخطط الزمني والموجات الصوتية
@@ -196,7 +186,6 @@
                   </div>
                 </div>
 
-                {/* قسم الأدوات والمزايا المتقدمة */}
                 <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between gap-6 shadow-2xl">
                   <div className="flex flex-col gap-5">
                     <div>
@@ -204,7 +193,6 @@
                       <p className="text-xs text-slate-400">فعّل الخيارات لتعديل الفيديو فوراً</p>
                     </div>
 
-                    {/* خيارات التعديل */}
                     <div className="flex flex-col gap-3">
                       <label className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-2xl cursor-pointer hover:border-indigo-500/50 transition">
                         <span className="text-sm font-medium text-white">حذف سكتات الصمت التلقائي</span>
@@ -227,7 +215,6 @@
                       </label>
                     </div>
 
-                    {/* قائمة فلاتر الألوان */}
                     <div className="flex flex-col gap-2">
                       <label className="text-xs font-bold text-slate-300">فلتر تصحيح الألوان (Color Grading)</label>
                       <select 
@@ -242,7 +229,6 @@
                       </select>
                     </div>
 
-                    {/* إضافة علامة مائية */}
                     <div className="flex flex-col gap-2">
                       <label className="text-xs font-bold text-slate-300">نص العلامة المائية (Watermark)</label>
                       <input 
@@ -255,7 +241,6 @@
                     </div>
                   </div>
 
-                  {/* أزرار التصدير والتحميل */}
                   <div className="flex flex-col gap-3 pt-4 border-t border-slate-800">
                     <button 
                       onClick={handleExport}
@@ -280,9 +265,7 @@
                       رفع فيديو آخر
                     </button>
                   </div>
-
                 </div>
-
               </div>
             )}
           </main>
@@ -290,7 +273,7 @@
       );
     }
 
-    ReactDOM.createRoot(getElementById ? document.getElementById('root') : document.getElementById('root')).render(<App />);
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
 </body>
 </html>
